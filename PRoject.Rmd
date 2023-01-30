@@ -1,0 +1,340 @@
+---
+output:
+  bookdown::pdf_book:
+    toc_depth: 2
+    fig_height : 5
+    fig_width : 8
+    citation_package: natbib
+    includes:
+      in_header: import.sty 
+      before_body: title.sty
+documentclass: report
+classoption : oneside
+bibliography: ref.bib
+csl: ama.csl
+geometry: [top=1in, bottom=1in, right=1in, left=1.5in]
+linestretch: 2
+fontsize: 12pt
+---
+
+# Introduction:
+
+## Background of The Study
+
+Data for time series is gathered from various points throughout time. As a result, the data set has a great deal of variety. So, a technique known as smoothing is employed to lessen these variations. Techniques for removing noise from a time series of data include smoothing techniques. It aids in determining the datset's trend. When data is compiled, any volatility or other types of noise can be removed or reduced. Data smoothing is the term for this. Data smoothing is based on the notion that it can recognize simpler changes to assist in the prediction of various trends and patterns. It serves as a tool for statisticians or traders who must examine a lot of data, which is frequently challenging.
+
+
+## Objective of The Study
+
+Among all others smoothing methods moving average methods is the oldest and simplest smoothing methods. The main object of that study is comparing different types of moving average smoothing techniques such as simple moving average(SMA),exponentially-weighted moving average (EWMA), weighted moving average (WMA), double exponential moving average(DEMA),Hull moving average(HMA), Zero lag exponential moving average(ZLEMA) etc. Among them the syudy compares SMA, EWMA, WMA, DEMA,HMA and ZLEMA.
+
+
+
+
+
+
+# Literature review
+
+
+\citet{raudys2013moving} smoothed financial data using the moving average.
+
+
+\citet{ivanovski2018time} extrapolated the number of tourists using the moving average. The study aids in making wise decisions for the future.
+
+
+\citet{hameed2015smoothing} compares every smoothing method currently in use to forecast future demand for private universities in Bangladesh. They contrast different kinds of currently used smoothing techniques and discover that Holt's method provides the optimum accuracy for their work.
+
+For the purpose of early detection of infectious disease outbreaks, [@yang2018simulation] conducts simulation-based studies on the comparison of statistical and time series forecasting techniques. Here, various approaches are discussed in an effort to use simulation to produce the greatest results.
+
+\cite{sinaga2020medical} studied about medical disposable supply demand forecasting by moving average and exponential moving average method.
+
+
+For predicting power load, [@karim2013electricity] employed exponential smoothing and moving average, and exponential moving average outperformed moving average.
+
+\citet{fong2020finding} tried to  find an accurate early forecasting model from Small dataset of 2019-nCoV Novel Coronavirus outbreak.
+
+
+
+
+```{r setup, include=FALSE, echo=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Analysis
+
+```{r echo=FALSE}
+library(TTR)
+library(kableExtra)
+```
+
+
+```{r echo=FALSE}
+x_norm = ts(rnorm(100000, mean = 50, sd = 5))
+x = x_norm
+```
+
+
+ 
+
+
+```{r echo=FALSE}
+# simple moving average 
+s = SMA(x,n = 2)
+sm = mean(abs(s  - x), na.rm = T)
+smm = mean((s  - x)^2, na.rm = T)
+# exponential moving average
+ema = EMA(x, n= 2)
+em = mean(abs(ema  - x), na.rm = T)
+emm = mean((ema  - x)^2, na.rm = T)
+# Double exponential
+
+
+dema = DEMA(x, n = 2)
+
+dm = mean(abs(dema - x), na.rm = T)
+dmm = mean((dema  - x)^2, na.rm = T)
+
+# Weighted moving average
+wma = WMA(x, n = 2,wts = 1:2)
+wm = mean (abs(wma - x), na.rm = T)
+
+wmm = mean((wma - x)^2, na.rm = T)
+# Hull moving average 
+hd = HMA(x, n = 2)
+hm = mean(abs(hd - x), na.rm = TRUE)
+hmm = mean((hd - x)^2, na.rm = TRUE)
+
+# Zero lag exponential moving average.
+zd = ZLEMA(x, n = 2)
+zm = mean(abs(zd - x), na.rm = TRUE)
+zmm = mean((zd - x)^2, na.rm = TRUE)
+```
+
+
+```{r echo=FALSE}
+comp1 = data.frame(TYPE = c("SMA","EMA","DEMA","WMA","HMA","ZLEMA"), MAE = round(c(sm,em, dm, wm, hm, zm),3), MSE =round(c(smm,emm, dmm, wmm, hmm, zmm),3))
+
+
+#kbl(comp1, format = "latex")
+```
+
+
+```{r echo=FALSE}
+x = ts(rpois(100000, lambda = 10), frequency = 1)
+
+# simple moving average 
+s = SMA(x,n = 2)
+sm = mean(abs(s  - x), na.rm = T)
+smm = mean((s  - x)^2, na.rm = T)
+# exponential moving average
+ema = EMA(x, n= 2)
+em = mean(abs(ema  - x), na.rm = T)
+emm = mean((ema  - x)^2, na.rm = T)
+# Double exponential
+
+
+dema = DEMA(x, n = 2)
+
+dm = mean(abs(dema - x), na.rm = T)
+dmm = mean((dema  - x)^2, na.rm = T)
+
+# Weighted moving average
+wma = WMA(x, n = 2,wts = 1:2)
+wm = mean (abs(wma - x), na.rm = T)
+
+wmm = mean((wma - x)^2, na.rm = T)
+# Hull moving average 
+hd = HMA(x, n = 2)
+hm = mean(abs(hd - x), na.rm = TRUE)
+hmm = mean((hd - x)^2, na.rm = TRUE)
+
+# Zero lag exponential moving average.
+zd = ZLEMA(x, n = 2)
+zm = mean(abs(zd - x), na.rm = TRUE)
+zmm = mean((zd - x)^2, na.rm = TRUE)
+
+comp2 = data.frame(TYPE = c("SMA","EMA","DEMA","WMA","HMA","ZLEMA"), MAE = round(c(sm,em, dm, wm, hm, zm),3), MSE =round(c(smm,emm, dmm, wmm, hmm, zmm),3))
+```
+
+
+
+
+
+
+
+```{r echo=FALSE}
+x = ts(rgamma(100000, shape = 10, scale = 2), frequency = 1)
+
+s = SMA(x,n = 2)
+sm = mean(abs(s  - x), na.rm = T)
+smm = mean((s  - x)^2, na.rm = T)
+# exponential moving average
+ema = EMA(x, n= 2)
+em = mean(abs(ema  - x), na.rm = T)
+emm = mean((ema  - x)^2, na.rm = T)
+# Double exponential
+
+
+dema = DEMA(x, n = 2)
+
+dm = mean(abs(dema - x), na.rm = T)
+dmm = mean((dema  - x)^2, na.rm = T)
+
+# Weighted moving average
+wma = WMA(x, n = 2,wts = 1:2)
+wm = mean (abs(wma - x), na.rm = T)
+
+wmm = mean((wma - x)^2, na.rm = T)
+# Hull moving average 
+hd = HMA(x, n = 2)
+hm = mean(abs(hd - x), na.rm = TRUE)
+hmm = mean((hd - x)^2, na.rm = TRUE)
+
+# Zero lag exponential moving average.
+zd = ZLEMA(x, n = 2)
+zm = mean(abs(zd - x), na.rm = TRUE)
+zmm = mean((zd - x)^2, na.rm = TRUE)
+
+comp3 =data.frame(TYPE = c("SMA","EMA","DEMA","WMA","HMA","ZLEMA"), MAE = round(c(sm,em, dm, wm, hm, zm),3), MSE =round(c(smm,emm, dmm, wmm, hmm, zmm),3))
+
+
+```
+
+
+
+
+
+```{r echo=FALSE}
+x = ts(rt(100000, df = 10), frequency = 1)
+
+s = SMA(x,n = 2)
+sm = mean(abs(s  - x), na.rm = T)
+smm = mean((s  - x)^2, na.rm = T)
+# exponential moving average
+ema = EMA(x, n= 2)
+em = mean(abs(ema  - x), na.rm = T)
+emm = mean((ema  - x)^2, na.rm = T)
+# Double exponential
+
+
+dema = DEMA(x, n = 2)
+
+dm = mean(abs(dema - x), na.rm = T)
+dmm = mean((dema  - x)^2, na.rm = T)
+
+# Weighted moving average
+wma = WMA(x, n = 2,wts = 1:2)
+wm = mean (abs(wma - x), na.rm = T)
+
+wmm = mean((wma - x)^2, na.rm = T)
+# Hull moving average 
+hd = HMA(x, n = 2)
+hm = mean(abs(hd - x), na.rm = TRUE)
+hmm = mean((hd - x)^2, na.rm = TRUE)
+
+# Zero lag exponential moving average.
+zd = ZLEMA(x, n = 2)
+zm = mean(abs(zd - x), na.rm = TRUE)
+zmm = mean((zd - x)^2, na.rm = TRUE)
+
+comp4 = data.frame(TYPE = c("SMA","EMA","DEMA","WMA","HMA","ZLEMA"), MAE = round(c(sm,em, dm, wm, hm, zm),3), MSE =round(c(smm,emm, dmm, wmm, hmm, zmm),3))
+
+
+```
+
+
+
+
+```{r echo=FALSE}
+x = ts(rexp(100000, rate = 5), frequency = 1)
+
+s = SMA(x,n = 2)
+sm = mean(abs(s  - x), na.rm = T)
+smm = mean((s  - x)^2, na.rm = T)
+# exponential moving average
+ema = EMA(x, n= 2)
+em = mean(abs(ema  - x), na.rm = T)
+emm = mean((ema  - x)^2, na.rm = T)
+# Double exponential
+
+
+dema = DEMA(x, n = 2)
+
+dm = mean(abs(dema - x), na.rm = T)
+dmm = mean((dema  - x)^2, na.rm = T)
+
+# Weighted moving average
+wma = WMA(x, n = 2,wts = 1:2)
+wm = mean (abs(wma - x), na.rm = T)
+
+wmm = mean((wma - x)^2, na.rm = T)
+# Hull moving average 
+hd = HMA(x, n = 2)
+hm = mean(abs(hd - x), na.rm = TRUE)
+hmm = mean((hd - x)^2, na.rm = TRUE)
+
+# Zero lag exponential moving average.
+zd = ZLEMA(x, n = 2)
+zm = mean(abs(zd - x), na.rm = TRUE)
+zmm = mean((zd - x)^2, na.rm = TRUE)
+
+comp5 = data.frame(TYPE = c("SMA","EMA","DEMA","WMA","HMA","ZLEMA"), MAE = round(c(sm,em, dm, wm, hm, zm),3), MSE =round(c(smm,emm, dmm, wmm, hmm, zmm),3))
+
+
+```
+
+```{r echo=FALSE}
+# Weibull distribution
+x = ts(rweibull(100000, scale = 5, shape = 10), frequency = 1)
+
+# simple moving average 
+s = SMA(x,n = 2)
+sm = mean(abs(s  - x), na.rm = T)
+smm = mean((s  - x)^2, na.rm = T)
+# exponential moving average
+ema = EMA(x, n= 2)
+em = mean(abs(ema  - x), na.rm = T)
+emm = mean((ema  - x)^2, na.rm = T)
+# Double exponential
+
+
+dema = DEMA(x, n = 2)
+
+dm = mean(abs(dema - x), na.rm = T)
+dmm = mean((dema  - x)^2, na.rm = T)
+
+# Weighted moving average
+wma = WMA(x, n = 2,wts = 1:2)
+wm = mean (abs(wma - x), na.rm = T)
+
+wmm = mean((wma - x)^2, na.rm = T)
+# Hull moving average 
+hd = HMA(x, n = 2)
+hm = mean(abs(hd - x), na.rm = TRUE)
+hmm = mean((hd - x)^2, na.rm = TRUE)
+
+# Zero lag exponential moving average.
+zd = ZLEMA(x, n = 2)
+zm = mean(abs(zd - x), na.rm = TRUE)
+zmm = mean((zd - x)^2, na.rm = TRUE)
+
+comp6 = data.frame(TYPE = c("SMA","EMA","DEMA","WMA","HMA","ZLEMA"), MAE = round(c(sm,em, dm, wm, hm, zm),3), MSE =round(c(smm,emm, dmm, wmm, hmm, zmm),3))
+
+```
+
+
+
+```{r echo=FALSE}
+kbl(cbind(comp1, comp2,comp6), format ="latex",booktabs = T, caption = "Smoothing comparison table") %>% 
+  add_header_above(c("Normal Distribution" = 3, "Poisson Distribution" = 3,"Weibull Distribution"=3))%>% kable_styling(latex_options = "HOLD_position")
+
+```
+
+```{r echo=FALSE}
+kbl(cbind(comp2, comp4, comp5), format ="latex",booktabs = T, caption = "Smoothing comparison table") %>% 
+  add_header_above(c("Gamma Distribution" = 3, "T Distribution" = 3,"Exponential Distribution" = 3))%>% kable_styling(latex_options = "HOLD_position")
+
+```
+
+
+
