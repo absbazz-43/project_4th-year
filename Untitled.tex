@@ -1,0 +1,373 @@
+\documentclass{article}
+
+\usepackage{arxiv}
+
+\usepackage[utf8]{inputenc} % allow utf-8 input
+\usepackage[T1]{fontenc}    % use 8-bit T1 fonts
+\usepackage{lmodern}        % https://github.com/rstudio/rticles/issues/343
+\usepackage{hyperref}       % hyperlinks
+\usepackage{url}            % simple URL typesetting
+\usepackage{booktabs}       % professional-quality tables
+\usepackage{amsfonts}       % blackboard math symbols
+\usepackage{nicefrac}       % compact symbols for 1/2, etc.
+\usepackage{microtype}      % microtypography
+\usepackage{graphicx}
+
+\title{An analysis using simulation to compare several moving average
+techniques for time series data.}
+
+\author{
+    Bishal sarker
+   \\
+    Applied Statistics \\
+    University of Dhaka \\
+  Dhaka, Bangladesh \\
+  \texttt{\href{mailto:sarkerbishal02@gmail.com}{\nolinkurl{sarkerbishal02@gmail.com}}} \\
+   \And
+    Elias D. Striatum
+   \\
+    Department of Electrical Engineering \\
+    Mount-Sheikh University \\
+  Santa Narimana, Levand \\
+  \texttt{\href{mailto:stariate@ee.mount-sheikh.edu}{\nolinkurl{stariate@ee.mount-sheikh.edu}}} \\
+  }
+
+
+% tightlist command for lists without linebreak
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+
+
+% Pandoc citation processing
+\newlength{\cslhangindent}
+\setlength{\cslhangindent}{1.5em}
+\newlength{\csllabelwidth}
+\setlength{\csllabelwidth}{3em}
+\newlength{\cslentryspacingunit} % times entry-spacing
+\setlength{\cslentryspacingunit}{\parskip}
+% for Pandoc 2.8 to 2.10.1
+\newenvironment{cslreferences}%
+  {}%
+  {\par}
+% For Pandoc 2.11+
+\newenvironment{CSLReferences}[2] % #1 hanging-ident, #2 entry spacing
+ {% don't indent paragraphs
+  \setlength{\parindent}{0pt}
+  % turn on hanging indent if param 1 is 1
+  \ifodd #1
+  \let\oldpar\par
+  \def\par{\hangindent=\cslhangindent\oldpar}
+  \fi
+  % set entry spacing
+  \setlength{\parskip}{#2\cslentryspacingunit}
+ }%
+ {}
+\usepackage{calc}
+\newcommand{\CSLBlock}[1]{#1\hfill\break}
+\newcommand{\CSLLeftMargin}[1]{\parbox[t]{\csllabelwidth}{#1}}
+\newcommand{\CSLRightInline}[1]{\parbox[t]{\linewidth - \csllabelwidth}{#1}\break}
+\newcommand{\CSLIndent}[1]{\hspace{\cslhangindent}#1}
+
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{wrapfig}
+\usepackage{float}
+\usepackage{colortbl}
+\usepackage{pdflscape}
+\usepackage{tabu}
+\usepackage{threeparttable}
+\usepackage{threeparttablex}
+\usepackage[normalem]{ulem}
+\usepackage{makecell}
+\usepackage{xcolor}
+\begin{document}
+\maketitle
+
+
+\begin{abstract}
+Enter the text of your abstract here.
+\end{abstract}
+
+\keywords{
+    blah
+   \and
+    blee
+   \and
+    bloo
+   \and
+    these are optional and can be removed
+  }
+
+\hypertarget{introduction}{%
+\section{Introduction:}\label{introduction}}
+
+\hypertarget{background-of-the-study}{%
+\subsection{Background of The Study}\label{background-of-the-study}}
+
+Data for time series is gathered from various points throughout time. As
+a result, the data set has a great deal of variety. So, a technique
+known as smoothing is employed to lessen these variations. Techniques
+for removing noise from a time series of data include smoothing
+techniques. It aids in determining the datset's trend. When data is
+compiled, any volatility or other types of noise can be removed or
+reduced. Data smoothing is the term for this. Data smoothing is based on
+the notion that it can recognize simpler changes to assist in the
+prediction of various trends and patterns. It serves as a tool for
+statisticians or traders who must examine a lot of data, which is
+frequently challenging.
+
+\hypertarget{objective-of-the-study}{%
+\subsection{Objective of The Study}\label{objective-of-the-study}}
+
+Among all others smoothing methods moving average methods is the oldest
+and simplest smoothing methods. The main object of that study is
+comparing different types of moving average smoothing techniques such as
+simple moving average(SMA),exponentially-weighted moving average (EWMA),
+weighted moving average (WMA), double exponential moving
+average(DEMA),Hull moving average(HMA), Zero lag exponential moving
+average(ZLEMA) etc. Among them the syudy compares SMA, EWMA, WMA,
+DEMA,HMA and ZLEMA.
+
+\hypertarget{literature-review}{%
+\section{Literature review}\label{literature-review}}
+
+Raudys, Lenčiauskas, and Malčius (2013) smoothed financial data using
+the moving average.
+
+Ivanovski, Milenkovski, and Narasanov (2018) extrapolated the number of
+tourists using the moving average. The study aids in making wise
+decisions for the future.
+
+Hameed (2015) compares every smoothing method currently in use to
+forecast future demand for private universities in Bangladesh. They
+contrast different kinds of currently used smoothing techniques and
+discover that Holt's method provides the optimum accuracy for their
+work.
+
+For the purpose of early detection of infectious disease outbreaks, Yang
+et al. (2018) conducts simulation-based studies on the comparison of
+statistical and time series forecasting techniques. Here, various
+approaches are discussed in an effort to use simulation to produce the
+greatest results.
+
+Sinaga and Irawati (2020) studied about medical disposable supply demand
+forecasting by moving average and exponential moving average method.
+
+For predicting power load, Karim and Alwi (2013) employed exponential
+smoothing and moving average, and exponential moving average
+outperformed moving average.
+
+Fong et al. (2020) tried to find an accurate early forecasting model
+from Small dataset of 2019-nCoV Novel Coronavirus outbreak.
+
+\hypertarget{methodology}{%
+\section{Methodology}\label{methodology}}
+
+\hypertarget{simple-moving-average-sma}{%
+\subsection{Simple moving average
+(SMA)}\label{simple-moving-average-sma}}
+
+By averaging several different subsets of the entire data set, a simple
+moving average (SMA) statistical technique is utilized to examine data
+points. Because it is calculated by averaging a predetermined number of
+successive data points with equal weight for each, it is referred to as
+being ``simple.'' The SMA is used to highlight long-term trends or
+patterns in the data and to smooth out short-term volatility in the
+data.The formula for SMA is given below,
+
+\[
+{T_t = \frac{\sum_{i=-m}^{m} Y_{t+i}}{k}} 
+\]
+
+here k is the number of order and \(Y_i\) is the observation.
+m=\(\frac{k-1}{2}\) is the half width of a moving average as the number
+of points. For example, a arithmetic moving average of 3 ordered at time
+t is \(T_t=\frac{Y_{t-1}+Y_t+Y_{t+1}}{3}\).
+
+Simple Moving Average (SMA) and Exponential Moving Average (EMA) both
+measure trend direction over time. SMA only determines an average, but
+EMA gives more weight to data that is more recent.
+
+\hypertarget{exponentially-moving-average-ema}{%
+\subsection{Exponentially moving average
+(EMA)}\label{exponentially-moving-average-ema}}
+
+Simple Moving Average (SMA) and Exponential Moving Average (EMA) both
+measure trend direction over time. SMA only determines an average, but
+EMA gives more weight to data that is more recent. \[
+EMA = C – P  \frac{2}{(n+1)} + P
+\]
+
+where C and P are current data point and an exponential moving average
+of the previous period (simple average used for the first period)
+respectively. THe formula is given below,
+
+\hypertarget{weighted-moving-average}{%
+\subsection{Weighted moving average}\label{weighted-moving-average}}
+
+When calculating the weighted moving average, recent data points are
+given more weighting than historical data points. When added together,
+the weights' total value ought to be 100\%, or 1. The weighting factor
+used to calculate the WMA is determined by the period selected for the
+indicator. For example, a 5 period WMA would be calculated as follows:
+
+\[
+WMA = \frac{(5P_{1}  + 4P_2  + 3P_3  + 2P_4  + 1P_5 )} {(5 + 4+ 3 + 2 + 1)}
+\]
+
+Where, \(P_1\)= current price \(P_2\) = price one bar ago and so on.
+
+\hypertarget{zlema}{%
+\subsection{ZLEMA}\label{zlema}}
+
+John Ehlers and Ric Way created the Zero Lag Exponential Moving Average
+(ZLEMA) indicator. The goal is to get rid of the inherent lag that all
+averages and other trend following indicators have.
+
+This is what the ZLEMA aims to accomplish by tracking recent prices more
+closely than historical prices, much like a standard EMA but with an
+even greater emphasis on recent prices. A moving average with less lag
+and good smoothing is the end product.
+
+The benefits of using zero lag moving averages are as follows:
+
+\begin{itemize}
+\tightlist
+\item
+  A moving average exponential without lag that is more responsive to
+  current price changes.
+\item
+  The indicator is applicable across all instruments and timeframes.
+\item
+  The indicator may be used as a signal or as a filter for signals.
+\end{itemize}
+
+Formula are given below ,
+
+\[
+\alpha = \frac{2}{n+1}  
+\] \[
+Z_{t} = (1 - \alpha)Z_t + \alpha (T_t - T_{t-\frac{n-1}{2}})
+\]
+
+Where , n is the number of period. \(\alpha\) represents the lag and
+\(Z_t\) represents the ZLEMA moving average at t time points.
+
+\hypertarget{dema}{%
+\subsection{DEMA}\label{dema}}
+
+A level component and a trend component are used in double exponential
+smoothing at each period. Two weights, also known as smoothing
+parameters, are used in double exponential smoothing to update the
+components at each time.The formula is given below,
+
+\[
+L_{t} = \alpha Y_{t} + (1-\alpha)(L_{t-1} + T_{t-1})
+\] \[
+T_t = \gamma (L_t – L_{t –1}) + (1 – \gamma) T_{t –1} 
+\] \[
+\hat Y= L_{t –1} + T_{t –1}
+\] Here , \(L_t\) level at time t.\\
+\(\alpha\) weight for the level.\\
+\(T_t\) trend at time t\\
+\(\gamma\) weight for the trend\\
+\(Y_t\) data value at time t\\
+\(\hat Y_t\) fitted value, or one-step-ahead forecast, at time t\\
+
+\hypertarget{analysis}{%
+\section{Analysis}\label{analysis}}
+
+\begin{table}[H]
+
+\caption{\label{tab:unnamed-chunk-10}Smoothing comparison table}
+\centering
+\begin{tabular}[t]{lrrlrrlrr}
+\toprule
+\multicolumn{3}{c}{Normal Distribution} & \multicolumn{3}{c}{Poisson Distribution} & \multicolumn{3}{c}{Weibull Distribution} \\
+\cmidrule(l{3pt}r{3pt}){1-3} \cmidrule(l{3pt}r{3pt}){4-6} \cmidrule(l{3pt}r{3pt}){7-9}
+TYPE & MAE & MSE & TYPE & MAE & MSE & TYPE & MAE & MSE\\
+\midrule
+SMA & 2.813 & 12.440 & SMA & 1.770 & 4.978 & SMA & 0.319 & 0.164\\
+EMA & 1.624 & 4.142 & EMA & 1.028 & 1.660 & EMA & 0.184 & 0.055\\
+DEMA & 0.742 & 0.864 & DEMA & 0.469 & 0.346 & DEMA & 0.084 & 0.011\\
+WMA & 1.875 & 5.529 & WMA & 1.180 & 2.212 & WMA & 0.213 & 0.073\\
+HMA & 1.875 & 5.529 & HMA & 1.180 & 2.212 & HMA & 0.213 & 0.073\\
+\addlinespace
+ZLEMA & 1.873 & 5.506 & ZLEMA & 1.187 & 2.216 & ZLEMA & 0.213 & 0.073\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+
+\caption{\label{tab:unnamed-chunk-11}Smoothing comparison table}
+\centering
+\begin{tabular}[t]{lrrlrrlrr}
+\toprule
+\multicolumn{3}{c}{Gamma Distribution} & \multicolumn{3}{c}{T Distribution} & \multicolumn{3}{c}{Exponential Distribution} \\
+\cmidrule(l{3pt}r{3pt}){1-3} \cmidrule(l{3pt}r{3pt}){4-6} \cmidrule(l{3pt}r{3pt}){7-9}
+TYPE & MAE & MSE & TYPE & MAE & MSE & TYPE & MAE & MSE\\
+\midrule
+SMA & 1.770 & 4.978 & SMA & 0.622 & 0.629 & SMA & 0.100 & 0.020\\
+EMA & 1.028 & 1.660 & EMA & 0.359 & 0.209 & EMA & 0.059 & 0.007\\
+DEMA & 0.469 & 0.346 & DEMA & 0.164 & 0.044 & DEMA & 0.027 & 0.001\\
+WMA & 1.180 & 2.212 & WMA & 0.415 & 0.279 & WMA & 0.066 & 0.009\\
+HMA & 1.180 & 2.212 & HMA & 0.415 & 0.279 & HMA & 0.066 & 0.009\\
+\addlinespace
+ZLEMA & 1.187 & 2.216 & ZLEMA & 0.414 & 0.279 & ZLEMA & 0.068 & 0.009\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\hypertarget{refs}{}
+\begin{CSLReferences}{1}{0}
+\leavevmode\vadjust pre{\hypertarget{ref-fong2020finding}{}}%
+Fong, Simon James, Gloria Li, Nilanjan Dey, Rubén González Crespo, and
+Enrique Herrera-Viedma. 2020. {``Finding an Accurate Early Forecasting
+Model from Small Dataset: A Case of 2019-Ncov Novel Coronavirus
+Outbreak.''} \emph{arXiv Preprint arXiv:2003.10776}.
+
+\leavevmode\vadjust pre{\hypertarget{ref-hameed2015smoothing}{}}%
+Hameed, Haifaa Hussein. 2015. {``Smoothing Techniques for Time Series
+Forecasting.''} Master's thesis, Eastern Mediterranean University
+(EMU)-Do{ğ}u Akdeniz {Ü}niversitesi (DA{Ü}).
+
+\leavevmode\vadjust pre{\hypertarget{ref-ivanovski2018time}{}}%
+Ivanovski, Zoran, Ace Milenkovski, and Zoran Narasanov. 2018. {``TIME
+SERIES FORECASTING USING a MOVING AVERAGE MODEL FOR EXTRAPOLATION OF
+NUMBER OF TOURIST.''} \emph{UTMS Journal of Economics} 9 (2).
+
+\leavevmode\vadjust pre{\hypertarget{ref-karim2013electricity}{}}%
+Karim, SA Abdul, and Saiful Azli Alwi. 2013. {``Electricity Load
+Forecasting in UTP Using Moving Averages and Exponential Smoothing
+Techniques.''} \emph{Applied Mathematical Sciences} 7 (77-80): 4003--14.
+
+\leavevmode\vadjust pre{\hypertarget{ref-raudys2013moving}{}}%
+Raudys, Aistis, Vaidotas Lenčiauskas, and Edmundas Malčius. 2013.
+{``Moving Averages for Financial Data Smoothing.''} In \emph{Information
+and Software Technologies: 19th International Conference, ICIST 2013,
+Kaunas, Lithuania, October 2013. Proceedings 19}, 34--45. Springer.
+
+\leavevmode\vadjust pre{\hypertarget{ref-sinaga2020medical}{}}%
+Sinaga, H, and N Irawati. 2020. {``A Medical Disposable Supply Demand
+Forecasting by Moving Average and Exponential Smoothing Method.''} In
+\emph{Proceedings of the 2nd Workshop on Multidisciplinary and
+Applications (WMA) 2018, 24-25 January 2018, Padang, Indonesia}.
+
+\leavevmode\vadjust pre{\hypertarget{ref-yang2018simulation}{}}%
+Yang, Eunjoo, Hyun Woo Park, Yeon Hwa Choi, Jusim Kim, Lkhagvadorj
+Munkhdalai, Ibrahim Musa, and Keun Ho Ryu. 2018. {``A Simulation-Based
+Study on the Comparison of Statistical and Time Series Forecasting
+Methods for Early Detection of Infectious Disease Outbreaks.''}
+\emph{International Journal of Environmental Research and Public Health}
+15 (5): 966.
+
+\end{CSLReferences}
+
+\bibliographystyle{unsrt}
+\bibliography{references.bib}
+
+
+\end{document}
